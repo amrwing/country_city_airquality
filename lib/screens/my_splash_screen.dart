@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:contamination_cities/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
@@ -13,7 +13,7 @@ class MySplashScreen extends StatefulWidget {
 class _MySplashScreenState extends State<MySplashScreen> {
   void startTimer() {
     Future.delayed(const Duration(seconds: 3)).then((_) {
-      router.go('/home_screen');
+      context.go('/home_screen');
     });
   }
 
