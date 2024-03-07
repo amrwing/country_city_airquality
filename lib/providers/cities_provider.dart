@@ -4,7 +4,7 @@ class SelectedCityProvider extends ChangeNotifier {
   //COUNTRY INDEX IS THE INDEX ON THE COUNTRY LIST PROVIDED BY THE API
   String _cityName = "";
   // String _country = ""; este dato ya lo posee el provider de Countries
-  double _population = -1;
+  int _population = -1;
   double _latitude = 0.0;
   double _longitude = 0.0;
   //GETTER DEL NOMBRE DE LA CIUDAD
@@ -19,12 +19,12 @@ class SelectedCityProvider extends ChangeNotifier {
   }
 
   //GETTER DE LA POBLACIÓN DE LA CIUDAD
-  double get getCityPopulation {
+  int get getCityPopulation {
     return _population;
   }
 
   //SETTER DE LA POBLACIÓN DE LA CIUDAD
-  set setCityPopulation(double cityPop) {
+  set setCityPopulation(int cityPop) {
     _population = cityPop;
     notifyListeners();
   }

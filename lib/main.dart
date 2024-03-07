@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SelectedCountryProvider()),
+        ChangeNotifierProvider(create: (_) => SelectedCityProvider())
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

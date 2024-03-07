@@ -34,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          "Countries",
+          "Países",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.black,
       ),
       body: Center(
         child: Padding(
@@ -48,12 +48,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 : MainAxisAlignment.start,
             children: [
               const Text(
-                "Find Out About Countries",
+                "Calidad del aire alrededor del mundo\nPrimero, encontremos el país\n",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: TextField(
+                  onChanged: (val) {
+                    if (val.trim() == "") {
+                      selectedCountry.setName = "";
+                      selectedCountry.setCapital = "";
+                      selectedCountry.setCurrency = "";
+                      selectedCountry.setIsoKey = "";
+                      selectedCountry.setPopulation = -1;
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  },
                   focusNode: _focusNode,
                   onTapOutside: (_) => _focusNode.unfocus(),
                   decoration: InputDecoration(
@@ -62,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Icon(Icons.search),
                             Text(
-                              "Search a country",
+                              "Buscar país",
                             )
                           ]),
                       border: OutlineInputBorder(
@@ -71,56 +84,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  if (finder.text.trim() != "") {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    final value = await RequestMethods.solicitarDatosDePais(
-                        finder.text.trim());
-                    if (value == "Not found") {
-                      //NO SE ENCONTRARON COINCIDENCIAS
+                  onPressed: () async {
+                    if (finder.text.trim() != "") {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      final value = await RequestMethods.solicitarDatosDePais(
+                          finder.text.trim());
+                      if (value == "Not found") {
+                        //NO SE ENCONTRARON COINCIDENCIAS
+                        selectedCountry.setName = "";
+                        selectedCountry.setCapital = "";
+                        selectedCountry.setCurrency = "";
+                        selectedCountry.setIsoKey = "";
+                        selectedCountry.setPopulation = -1;
+                        textoAviso = "País no encontrado";
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } else if (value is List<dynamic> && value.isNotEmpty) {
+                        textoAviso = null;
+                        selectedCountry.setName = value[0]['name'];
+                        selectedCountry.setCapital = value[0]['capital'];
+                        selectedCountry.setCurrency =
+                            value[0]['currency']['name'];
+                        selectedCountry.setIsoKey = value[0]['iso2'];
+                        selectedCountry.setPopulation = value[0]['population'];
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } else {
+                        //LA RESPUESTA ES UN ERROR
+                        textoAviso = "Error $value";
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    } else {
                       selectedCountry.setName = "";
                       selectedCountry.setCapital = "";
                       selectedCountry.setCurrency = "";
                       selectedCountry.setIsoKey = "";
                       selectedCountry.setPopulation = -1;
-                      textoAviso = "Country not found";
-                      setState(() {
-                        isLoading = false;
-                      });
-                    } else if (value is List<dynamic> && value.isNotEmpty) {
                       textoAviso = null;
-                      selectedCountry.setName = value[0]['name'];
-                      selectedCountry.setCapital = value[0]['capital'];
-                      selectedCountry.setCurrency =
-                          value[0]['currency']['name'];
-                      selectedCountry.setIsoKey = value[0]['iso2'];
-                      selectedCountry.setPopulation = value[0]['population'];
-                      setState(() {
-                        isLoading = false;
-                      });
-                    } else {
-                      //LA RESPUESTA ES UN ERROR
-                      textoAviso = "Error $value";
                       setState(() {
                         isLoading = false;
                       });
                     }
-                  } else {
-                    selectedCountry.setName = "";
-                    selectedCountry.setCapital = "";
-                    selectedCountry.setCurrency = "";
-                    selectedCountry.setIsoKey = "";
-                    selectedCountry.setPopulation = -1;
-                    textoAviso = null;
-                    setState(() {
-                      isLoading = false;
-                    });
-                  }
-                },
-                child: const Text("Search"),
-              ),
+                    //CUANDO ESTÁ VACÍO NO MUESTRA NADA
+                    setState(() {});
+                  },
+                  child: const Text("Buscar")),
               (isLoading)
                   ? const Padding(
                       padding: EdgeInsets.only(top: 20),
@@ -159,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           const Icon(Icons.people_sharp),
                                           Text(
-                                              " ${selectedCountry.getPopulation.toInt().toString()} people")
+                                              " ${selectedCountry.getPopulation.toInt().toString()} personas")
                                         ],
                                       ),
                                     ),
@@ -190,29 +204,54 @@ class _HomeScreenState extends State<HomeScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: ElevatedButton(
                                             onPressed: () async {
-                                              //Realizamos la consulta de la api
-
-                                              final value = await RequestMethods
-                                                  .solicitarCiudadesDePais(
-                                                      selectedCountry.getIsoKey,
-                                                      30);
-                                              //Si el valor retornado es una lista y no está vacía, entonces encontró las ciudades
-                                              if (value is List<dynamic> &&
-                                                  value.isNotEmpty) {
-                                                //Asignamos las ciudades a un archivo global para poder usarla en la proxima pantalla
-                                                listaCiudadesPrincipal = value;
+                                              try {
+                                                //Realizamos la consulta de la api
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 20),
+                                                          child: Center(
+                                                            child:
+                                                                CircularProgressIndicator(),
+                                                          ),
+                                                        ));
+                                                final value =
+                                                    await RequestMethods
+                                                        .solicitarCiudadesDePais(
+                                                            selectedCountry
+                                                                .getIsoKey,
+                                                            30);
+                                                //Si el valor retornado es una lista y no está vacía, entonces encontró las ciudades
+                                                if (value is List<dynamic> &&
+                                                    value.isNotEmpty) {
+                                                  //Asignamos las ciudades a un archivo global para poder usarla en la proxima pantalla
+                                                  listaCiudadesPrincipal =
+                                                      value;
+                                                  // ignore: use_build_context_synchronously
+                                                  context.pop();
+                                                  // ignore: use_build_context_synchronously
+                                                  context
+                                                      .push("/cities_screen");
+                                                } else {
+                                                  //LA RESPUESTA ES UN ERROR
+                                                  textoAviso = "Error $value";
+                                                  // ignore: use_build_context_synchronously
+                                                  context.pop();
+                                                }
+                                              } catch (e) {
                                                 // ignore: use_build_context_synchronously
-                                                context.push("/cities_screen");
-                                              } else {
-                                                //LA RESPUESTA ES UN ERROR
-                                                textoAviso = "Error $value";
+                                                context.pop();
+                                                rethrow;
                                               }
                                             },
                                             child: const SizedBox(
                                               child: Padding(
                                                 padding: EdgeInsets.only(
                                                     top: 10, bottom: 10),
-                                                child: Text("Check Cities"),
+                                                child: Text("Ver ciudades"),
                                               ),
                                             )),
                                       ),
