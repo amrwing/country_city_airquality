@@ -1,7 +1,7 @@
 import 'package:contamination_cities/api/request_methods.dart';
 import 'package:contamination_cities/global/global_api_information.dart';
-import 'package:contamination_cities/providers/cities_provider.dart';
-import 'package:contamination_cities/providers/coutries_provider.dart';
+import 'package:contamination_cities/helpers/assistant_methods.dart';
+import 'package:contamination_cities/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -208,38 +208,9 @@ class _CitiesScreenState extends State<CitiesScreen> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: ElevatedButton(
-                                              onPressed: () {
-                                                //TODO: IMPLEMENTAR CHEQUEO DE CALIDAD DE AIRE
-                                                showDialog(
-                                                  anchorPoint: Offset
-                                                      .fromDirection(BorderSide
-                                                          .strokeAlignCenter),
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return Center(
-                                                      child: Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          5),
-                                                                ),
-                                                                color: Colors
-                                                                    .white),
-                                                        child: const Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text("Hola"),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              },
+                                              onPressed: () => AssistantMethods
+                                                  .airQualityDialog(
+                                                      context, index),
                                               child: const SizedBox(
                                                 child: Padding(
                                                   padding: EdgeInsets.only(
@@ -249,7 +220,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
                                                 ),
                                               )),
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -328,9 +299,10 @@ class _CitiesScreenState extends State<CitiesScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: ElevatedButton(
-                                                onPressed: () async {
-                                                  //TODO: IMPLEMENTAR CHEQUEO DE CALIDAD DE AIRE
-                                                },
+                                                onPressed: () => AssistantMethods
+                                                    .airQualityDialogSearch(
+                                                        context,
+                                                        selectedCityProvider),
                                                 child: const SizedBox(
                                                   child: Padding(
                                                     padding: EdgeInsets.only(
