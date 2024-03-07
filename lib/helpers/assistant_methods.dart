@@ -25,6 +25,7 @@ class AssistantMethods {
         .then((value) {
       if (value is Map && value.isNotEmpty) {
         context.pop();
+        //EN ESTA SECCIÓN ASIGNAMOS LOS VALORES DE ESTATUS DEL AIRE DEPENDIENDO DEL AQI PROMEDIO DE CADA CIUDAD
         String calidadCualitativa = "";
         Color colorIndicador = Colors.white;
         calidadAire = value;
@@ -51,6 +52,7 @@ class AssistantMethods {
           calidadCualitativa = "Peligroso";
           colorIndicador = Colors.indigo;
         }
+        //MOSTRAMOS EL DIALOG DONDE SE MUESTRA LA INFORMACIÓN DEL AIRE DE LA CIUDAD
         showDialog(
           anchorPoint: Offset.fromDirection(BorderSide.strokeAlignCenter),
           context: context,
@@ -96,6 +98,7 @@ class AssistantMethods {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          //
                           TarjetaComponenteQuimico(
                             calidadAire: calidadAire,
                             llave: 'CO',
