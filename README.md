@@ -1,16 +1,15 @@
 # contamination_cities
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This app is an example for Consuming API and formating data in a single app
+## Features
+* Search bar
+* Info about air quality of a city
+* Information about a country
+  * Population
+  * Capital city
+* Information about a city
+  * Population
+  * Latitude
+  * Longitude
+  * Air molecules density
+  * Cualitative info about the air condition
+    
